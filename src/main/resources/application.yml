@@ -1,0 +1,30 @@
+spring:
+  datasource:
+    url: ${SPRING_DATASOURCE_URL:jdbc:postgresql://localhost:5432/polislots}
+    username: ${SPRING_DATASOURCE_USERNAME:postgres}
+    password: ${SPRING_DATASOURCE_PASSWORD:71FCXlel}
+  jpa:
+    open-in-view: false
+
+    hibernate:
+      ddl-auto: update
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
+  security:
+    oauth2:
+      client:
+        registration:
+          google:
+            client-id: ${GOOGLE_CLIENT_ID}
+            client-secret: ${GOOGLE_CLIENT_SECRET}
+            scope: email, profile
+
+jwt:
+  secret: ${JWT_SECRET:my_super_puper_secret_key_which_is_long_enough_32chars}
+  expiration: 86400000
+
+server:
+  port: 8080
+
+logging:
+  level:
+    org.springframework.security: DEBUG
