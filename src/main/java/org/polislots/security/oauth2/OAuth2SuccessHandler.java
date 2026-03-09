@@ -7,6 +7,7 @@ import org.polislots.model.AuthProvider;
 import org.polislots.model.User;
 import org.polislots.repository.UserRepository;
 import org.polislots.security.jwt.JwtService;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.security.web.authentication.SimpleUrlAuthenticationSuccessHandler;
@@ -21,6 +22,9 @@ public class OAuth2SuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
     private final JwtService jwtService;
     private final UserRepository userRepository;
 
+    @Value("${app.frontend-url:http://localhost:5173}")
+    private String frontendUrl;
+
     @Override
     public void onAuthenticationSuccess(HttpServletRequest request,
                                         HttpServletResponse response,
@@ -28,7 +32,7 @@ public class OAuth2SuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
         OAuth2User oAuth2User = (OAuth2User) authentication.getPrincipal();
         User user = findOrCreateUser(oAuth2User);
         String token = jwtService.generateToken(user.getUsername());
-        getRedirectStrategy().sendRedirect(request, response, "http://localhost/oauth2/callback?token=" + token);
+        getRedirectStrategy().sendRedirect(request, response, frontendUrl + "/oauth2/callback?token=" + token);
     }
 
     private User findOrCreateUser(OAuth2User oAuth2User) {
