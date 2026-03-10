@@ -32,6 +32,7 @@ public class AuthService implements UserDetailsService {
                         .withUsername(u.getUsername())
                         .password(u.getPassword() != null ? u.getPassword() : "")
                         .authorities("ROLE_USER")
+                        .accountLocked(u.isBanned())
                         .build())
                 .orElseThrow(() -> new UsernameNotFoundException("User not found: " + username));
     }

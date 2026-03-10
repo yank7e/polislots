@@ -2,6 +2,7 @@ package org.polislots.exception;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.LockedException;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -30,10 +31,16 @@ public class GlobalExceptionHandler {
                 .body(Map.of("error", ex.getReason() != null ? ex.getReason() : ex.getMessage()));
     }
 
+    @ExceptionHandler(LockedException.class)
+    public ResponseEntity<Map<String, Object>> handleLocked(LockedException ex) {
+        return ResponseEntity.status(HttpStatus.FORBIDDEN)
+                .body(Map.of("error", "Ваш аккаунт заблокирован"));
+    }
+
     @ExceptionHandler(AuthenticationException.class)
     public ResponseEntity<Map<String, Object>> handleAuthentication(AuthenticationException ex) {
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
-                .body(Map.of("error", "Invalid username or password"));
+                .body(Map.of("error", "Неверный логин или пароль"));
     }
 
     @ExceptionHandler(Exception.class)

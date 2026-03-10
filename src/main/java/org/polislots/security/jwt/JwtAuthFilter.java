@@ -38,6 +38,14 @@ public class JwtAuthFilter extends OncePerRequestFilter {
         if (jwtService.isValid(token)) {
             String username = jwtService.extractUsername(token);
             UserDetails userDetails = userDetailsService.loadUserByUsername(username);
+
+            if (!userDetails.isAccountNonLocked()) {
+                response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+                response.setContentType("application/json;charset=UTF-8");
+                response.getWriter().write("{\"error\":\"Ваш аккаунт заблокирован\"}");
+                return;
+            }
+
             UsernamePasswordAuthenticationToken auth =
                     new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
             auth.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));

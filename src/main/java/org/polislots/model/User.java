@@ -39,6 +39,9 @@ public class User {
     @Column(nullable = false)
     private Long balance = 1000L;
 
+    @Column(nullable = false)
+    private boolean banned = false;
+
     @CreationTimestamp
     private LocalDateTime createdAt;
 }

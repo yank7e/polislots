@@ -1,4 +1,8 @@
 spring:
+  servlet:
+    multipart:
+      max-file-size: 5MB
+      max-request-size: 5MB
   datasource:
     url: ${SPRING_DATASOURCE_URL:jdbc:postgresql://localhost:5432/polislots}
     username: ${SPRING_DATASOURCE_USERNAME:postgres}
@@ -14,8 +18,8 @@ spring:
       client:
         registration:
           google:
-            client-id: <mock>
-            client-secret: <mock>
+            client-id: ${GOOGLE_CLIENT_ID}
+            client-secret: ${GOOGLE_CLIENT_SECRET}
             scope: email, profile
 
 jwt:
@@ -24,6 +28,8 @@ jwt:
 
 app:
   frontend-url: ${FRONTEND_URL:http://localhost:5173}
+  upload-dir: ${UPLOAD_DIR:./uploads}
+  superadmin-username: Adidas
 
 server:
   port: 8080
